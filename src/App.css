@@ -1,0 +1,856 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400..700&display=swap");
+
+/* =====================================================================
+   Theme tokens — warm late-afternoon farm light, not candy-bright.
+   ===================================================================== */
+:root {
+  --sky-top: #79b6d9;
+  --sky-mid: #a9d6c6;
+  --sky-horizon: #f4d998;
+  --grass-1: #6fa84a;
+  --grass-2: #5c9140;
+  --grass-3: #4a7a33;
+  --soil-1: #8b5a3c;
+  --soil-2: #6e4429;
+  --wood: #7a4b28;
+  --wood-dark: #4e2f18;
+  --wood-light: #a97c4f;
+  --parchment: #f3e3c0;
+  --parchment-edge: #d9bd88;
+  --ink: #3b2a1a;
+  --gold: #f4c430;
+  --gold-dark: #b8860b;
+  --accent: #e0703f;
+  --accent-dark: #b8542a;
+  --accent-2: #4c7ea8;
+  --panel-radius: 6px;
+  --pixel-shadow: 3px 3px 0 rgba(0, 0, 0, 0.28);
+  font-family: "Pixelify Sans", "Trebuchet MS", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 38%, var(--sky-horizon) 55%, var(--grass-1) 55%);
+  color: var(--ink);
+  image-rendering: -webkit-optimize-contrast;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+h1, h2, h3 {
+  font-family: "Press Start 2P", monospace;
+  line-height: 1.5;
+}
+
+/* A hard-edged "pixel" shadow — flat offset, no blur — used everywhere
+   instead of soft blurred drop shadows, which is what makes this read as
+   game UI rather than a web dashboard. */
+.pixel-frame {
+  border: 3px solid var(--wood-dark);
+  box-shadow: var(--pixel-shadow);
+}
+
+/* ===== Auth page ===== */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background:
+    radial-gradient(circle at 30% 15%, #d8eee0 0%, transparent 45%),
+    linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 35%, var(--sky-horizon) 52%, var(--grass-1) 52%, var(--grass-3) 100%);
+}
+
+.auth-card {
+  background: var(--parchment);
+  border: 4px solid var(--wood);
+  border-radius: var(--panel-radius);
+  padding: 30px 28px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 5px 5px 0 var(--wood-dark), 9px 9px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.auth-card h1 {
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+  color: var(--accent-dark);
+  letter-spacing: 0.5px;
+}
+
+.auth-subtitle {
+  margin: 0 0 22px;
+  opacity: 0.75;
+  font-size: 0.92rem;
+}
+
+.auth-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+}
+
+.auth-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.auth-card input {
+  padding: 10px 12px;
+  border-radius: 4px;
+  border: 2px solid var(--parchment-edge);
+  background: #fffdf6;
+  font-size: 1rem;
+  font-family: inherit;
+}
+.auth-card input:focus {
+  border-color: var(--accent);
+}
+
+.auth-card button[type="submit"] {
+  margin-top: 6px;
+  padding: 12px;
+  border: 2px solid var(--accent-dark);
+  border-bottom-width: 4px;
+  border-radius: 4px;
+  background: var(--accent);
+  color: #fff8ec;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: transform 0.1s steps(2), border-bottom-width 0.1s steps(2);
+}
+.auth-card button[type="submit"]:hover {
+  transform: translateY(-2px);
+}
+.auth-card button[type="submit"]:active {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #6b4f2c;
+  text-decoration: underline;
+  margin-top: 16px;
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+
+.auth-error,
+.inline-error {
+  color: #b3261e;
+  font-size: 0.85rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.brand-logo {
+  height: 2.1em;
+  width: auto;
+
+  image-rendering: pixelated; /* keep it crisp if it's a small pixel-art PNG */
+}
+/* =====================================================================
+   App shell
+   ===================================================================== */
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18px 16px 40px;
+  gap: 18px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.topbar {
+  width: 100%;
+  max-width: 1080px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  z-index: 5;
+}
+
+/* Wooden signpost — a hanging plaque on two little support posts, styled to
+   match a carved-wood game sign rather than plain page text. */
+.village-title-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.village-title-wrap::before,
+.village-title-wrap::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  width: 8px;
+  height: 16px;
+  background: var(--wood-dark);
+  border: 2px solid var(--wood-dark);
+  z-index: -1;
+}
+.village-title-wrap::before { left: 32%; }
+.village-title-wrap::after { right: 32%; }
+
+.village-title {
+  font-size: 1rem;
+  color: #fff8ec;
+  margin: 0;
+  letter-spacing: 1px;
+  background: linear-gradient(180deg, var(--wood-light), var(--wood));
+  border: 3px solid var(--wood-dark);
+  border-radius: 6px;
+  padding: 10px 24px;
+  box-shadow: var(--pixel-shadow), inset 0 0 0 2px rgba(255, 255, 255, 0.15);
+}
+
+/* Decorative scenery, purely visual, sits behind everything */
+.scenery {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.tree {
+  display: none;
+}
+.cloud {
+  position: absolute;
+  font-size: 2.4rem;
+  opacity: 0.9;
+  animation: drift 65s linear infinite;
+}
+.cloud-1 { top: 4%; left: -10%; }
+.cloud-2 { top: 9%; left: -30%; font-size: 1.9rem; animation-duration: 85s; animation-delay: -20s; }
+@keyframes drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(130vw); }
+}
+
+/* ===== HUD ===== */
+.hud {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(180deg, #c98b52, var(--wood));
+  border: 3px solid var(--wood-dark);
+  border-radius: var(--panel-radius);
+  padding: 7px 10px;
+  box-shadow: var(--pixel-shadow);
+  font-weight: 700;
+  color: #fff8ec;
+}
+
+.hud-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 0.92rem;
+}
+
+.hud-button {
+  border: 2px solid var(--accent-dark);
+  border-bottom-width: 3px;
+  border-radius: 4px;
+  padding: 6px 12px;
+  background: var(--accent);
+  color: #fff8ec;
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: transform 0.1s steps(2);
+}
+.hud-button:hover { transform: translateY(-1px); }
+.hud-button:active { transform: translateY(1px); border-bottom-width: 2px; }
+
+.hud-logout {
+  background: #6b5843;
+  border-color: #3d3122;
+}
+
+/* =====================================================================
+   Village canvas — open land, no grid. Plots are free-floating, positioned
+   by percentage, scattered around the house like an actual farm.
+   ===================================================================== */
+.village-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 1080px;
+  z-index: 5;
+}
+
+.village-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  min-height: 420px;
+  border: 7px solid #3f2515;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 0 3px var(--wood-light),
+    var(--pixel-shadow),
+    0 18px 30px rgba(0, 0, 0, 0.28);
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 30%, rgba(255, 244, 214, 0.35), transparent 70%),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.03) 0 3px, transparent 3px 26px),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.025) 0 3px, transparent 3px 26px),
+    linear-gradient(160deg, var(--grass-1) 0%, var(--grass-2) 55%, var(--grass-3) 100%);
+}
+
+.village-canvas-texture {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.35) 1.5px, transparent 1.5px),
+    radial-gradient(rgba(0, 0, 0, 0.12) 1.5px, transparent 1.5px);
+  background-size: 46px 46px, 63px 63px;
+  background-position: 0 0, 20px 30px;
+  mix-blend-mode: overlay;
+  opacity: 0.5;
+}
+
+.village-house {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 17%;
+  min-width: 104px;
+  aspect-ratio: 1;
+  background: radial-gradient(circle at 50% 30%, #ffe9b3, #f0c876 72%);
+  border: 3px solid var(--wood-dark);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  box-shadow: var(--pixel-shadow), inset 0 0 0 2px rgba(255, 255, 255, 0.4);
+  transition: transform 0.15s steps(2);
+  z-index: 6;
+}
+.village-house:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+}
+.house-shadow {
+  position: absolute;
+  bottom: -10%;
+  width: 70%;
+  height: 16%;
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: 50%;
+  filter: blur(1px);
+}
+.house-sprite {
+  font-size: 2.9rem;
+  filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.2));
+}
+.house-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--wood-dark);
+  letter-spacing: 0.5px;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.village-plot {
+  position: absolute;
+  transform: translate(-50%, -80%);
+  width: 88px;
+  height: 88px;
+  border: 3px solid;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 2px;
+  box-shadow: var(--pixel-shadow), inset 0 0 0 2px rgba(255, 255, 255, 0.25);
+  transition: transform 0.15s steps(2), box-shadow 0.15s ease;
+  touch-action: none;
+  cursor: grab;
+  z-index: 4;
+}
+.village-plot:hover {
+  transform: translate(-50%, -84%) scale(1.06);
+  z-index: 7;
+}
+.village-plot-dragging {
+  cursor: grabbing;
+  transition: none;
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.35);
+  z-index: 9;
+}
+
+.village-plot-open {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+  z-index: 7;
+}
+
+.plot-shadow {
+  position: absolute;
+  bottom: -8px;
+  width: 60%;
+  height: 20%;
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+.plot-sprite {
+  font-size: 2.1rem;
+  line-height: 1;
+  filter: drop-shadow(1px 2px 0 rgba(0, 0, 0, 0.25));
+}
+
+.plot-glow {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  font-size: 0.75rem;
+  transition: opacity 0.4s ease;
+  filter: drop-shadow(0 0 3px orange);
+}
+
+.plot-label {
+  font-size: 0.56rem;
+  font-weight: 700;
+  color: var(--ink);
+  max-width: 92%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 0 4px;
+  border-radius: 4px;
+}
+
+.plot-level {
+  font-size: 0.52rem;
+  font-weight: 700;
+  color: var(--wood-dark);
+}
+
+/* Floating "plant a new domain" button — replaces clicking an empty grid
+   cell now that the land is open. */
+.add-domain-fab {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(180deg, #8fc25e, var(--grass-3));
+  border: 3px solid var(--wood-dark);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 1.2rem;
+  box-shadow: var(--pixel-shadow);
+  transition: transform 0.12s steps(2);
+  z-index: 8;
+}
+.add-domain-fab:hover {
+  transform: translateY(-2px) scale(1.04);
+}
+.add-domain-fab:active {
+  transform: translateY(1px);
+}
+.add-domain-fab-plus {
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.85rem;
+  color: #fff8ec;
+  text-shadow: 1px 1px 0 var(--grass-3);
+}
+
+/* =====================================================================
+   Side panels — plot details, shop, new domain. Dock to the right edge of
+   the viewport and slide in, instead of appearing below the land.
+   ===================================================================== */
+.side-panel-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 14, 8, 0.42);
+  z-index: 30;
+}
+
+.side-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: min(400px, 92vw);
+  background: var(--parchment);
+  background-image: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.015) 0 2px, transparent 2px 4px);
+  border-left: 5px solid var(--wood);
+  box-shadow: -8px 0 0 rgba(0, 0, 0, 0.12), -18px 0 30px rgba(0, 0, 0, 0.28);
+  padding: 20px;
+  overflow-y: auto;
+  z-index: 31;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+  border-bottom: 2px dashed var(--parchment-edge);
+  padding-bottom: 12px;
+}
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.panel-heading-icon {
+  font-size: 1.8rem;
+  filter: drop-shadow(1px 2px 0 rgba(0, 0, 0, 0.2));
+}
+
+.panel-heading h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--accent-dark);
+}
+
+.panel-subtitle {
+  margin: 4px 0 0;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  font-weight: 600;
+}
+
+.panel-close {
+  background: var(--wood);
+  color: white;
+  border: 2px solid var(--wood-dark);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.xp-bar-track {
+  background: #e6d8bd;
+  border: 2px solid var(--wood);
+  border-radius: 999px;
+  height: 14px;
+  overflow: hidden;
+}
+
+.xp-bar-fill {
+  background: linear-gradient(90deg, var(--gold), #ffe27a);
+  height: 100%;
+  transition: width 0.5s ease;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.5);
+}
+
+.xp-bar-caption {
+  font-size: 0.75rem;
+  opacity: 0.75;
+  margin: 4px 0 12px;
+  font-weight: 700;
+}
+
+/* ===== Task list ===== */
+.task-form {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.task-form input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 4px;
+  border: 2px solid var(--parchment-edge);
+  background: #fffdf6;
+  font-family: inherit;
+}
+.task-form select {
+  border-radius: 4px;
+  border: 2px solid var(--parchment-edge);
+  background: #fffdf6;
+  font-family: inherit;
+}
+.task-form button {
+  border: 2px solid var(--accent-dark);
+  border-bottom-width: 3px;
+  border-radius: 4px;
+  background: var(--accent);
+  color: #fff8ec;
+  font-weight: 700;
+  padding: 0 14px;
+}
+
+.task-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.task-list li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fffdf6;
+  border: 2px solid var(--parchment-edge);
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 0.85rem;
+}
+
+.task-done {
+  opacity: 0.55;
+}
+.task-done .task-title {
+  text-decoration: line-through;
+}
+
+.task-check {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+}
+
+.task-title {
+  flex: 1;
+  text-align: left;
+}
+
+.task-difficulty {
+  font-size: 0.62rem;
+  font-weight: 700;
+  background: #eee2c8;
+  border: 1px solid var(--parchment-edge);
+  border-radius: 999px;
+  padding: 2px 8px;
+  text-transform: uppercase;
+}
+
+.task-delete {
+  background: none;
+  border: none;
+  color: #b3261e;
+  font-size: 0.9rem;
+}
+
+.task-empty {
+  opacity: 0.6;
+  font-size: 0.8rem;
+  padding: 8px 0;
+}
+
+/* ===== New domain form ===== */
+.new-domain-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+}
+.new-domain-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.new-domain-form input {
+  padding: 9px 10px;
+  border-radius: 4px;
+  border: 2px solid var(--parchment-edge);
+  background: #fffdf6;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.archetype-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fffdf6;
+  border: 2px dashed var(--parchment-edge);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.archetype-preview-sprite {
+  font-size: 1.9rem;
+  flex-shrink: 0;
+}
+.archetype-preview-label {
+  margin: 0;
+  font-size: 0.85rem;
+}
+.archetype-preview-hint {
+  margin: 3px 0 0;
+  font-size: 0.72rem;
+  opacity: 0.65;
+  line-height: 1.4;
+}
+
+.new-domain-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.new-domain-actions button[type="submit"] {
+  border: 2px solid var(--accent-dark);
+  border-bottom-width: 3px;
+  border-radius: 4px;
+  background: var(--accent);
+  color: #fff8ec;
+  font-weight: 700;
+  padding: 9px 18px;
+}
+
+/* ===== Shop ===== */
+.shop-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.shop-items li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fffdf6;
+  border: 2px solid var(--parchment-edge);
+  border-radius: 6px;
+  padding: 8px;
+}
+.shop-icon {
+  font-size: 1.3rem;
+}
+.shop-name {
+  flex: 1;
+  text-align: left;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.shop-cost {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  font-weight: 700;
+}
+.shop-items button {
+  border: 2px solid var(--accent-dark);
+  border-bottom-width: 3px;
+  border-radius: 4px;
+  background: var(--accent);
+  color: #fff8ec;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.shop-items button:disabled {
+  background: #b7ab90;
+  border-color: #7d715a;
+}
+.owned-decorations {
+  margin-top: 12px;
+  display: flex;
+  gap: 6px;
+  font-size: 1.2rem;
+}
+
+/* ===== Toast ===== */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--wood-dark);
+  color: #fff8ec;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 700;
+  z-index: 50;
+  border: 2px solid var(--gold);
+  box-shadow: var(--pixel-shadow);
+}
+
+.empty-hint {
+  color: white;
+  font-weight: 700;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  z-index: 5;
+}
+
+/* ===== Loading skeleton ===== */
+.village-skeleton {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  width: 100%;
+  max-width: 480px;
+  margin: 60px auto;
+  padding: 12px;
+}
+.skeleton-cell {
+  aspect-ratio: 1;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  animation: pulse 1.2s infinite ease-in-out;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.9; }
+}
+
+/* Accessibility: visible focus ring everywhere for keyboard nav */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid #2b6fff;
+  outline-offset: 2px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+  .village-plot { width: 72px; height: 72px; }
+  .plot-label { display: none; }
+  .plot-sprite { font-size: 1.7rem; }
+  .village-title { font-size: 0.82rem; }
+  .village-canvas { min-height: 340px; }
+  .side-panel { width: 100vw; border-left: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tree, .cloud { animation: none; }
+}

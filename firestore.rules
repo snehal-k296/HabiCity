@@ -1,0 +1,31 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // Allow create (first-time doc) and update, but never delete the user doc itself.
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth != null
+                    && request.auth.uid == userId
+                    // block naive client-side tampering: gold can never go negative
+                    && request.resource.data.gold >= 0;
+      allow delete: if false;
+
+      match /domains/{domainId} {
+        allow read, create: if request.auth != null && request.auth.uid == userId;
+        allow update: if request.auth != null
+                      && request.auth.uid == userId
+                      // block naive client-side tampering: XP can never decrease
+                      && request.resource.data.totalXp >= resource.data.totalXp;
+        allow delete: if request.auth != null && request.auth.uid == userId;
+
+        match /tasks/{taskId} {
+          allow read, create, update, delete: if request.auth != null && request.auth.uid == userId;
+        }
+      }
+    }
+  }
+}
