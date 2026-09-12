@@ -6,6 +6,14 @@ HabiCity is a gamified productivity and habit-tracking web application that tran
 
 Instead of managing habits through traditional lists, dashboards, and progress bars, every area of your life becomes a **domain represented by a plot of land**. Completing tasks earns XP, levels up that domain, and visually develops its plot from an empty patch of land into a fully developed structure.
 
+## Links
+
+| | |
+|---|---|
+| 🔗 **Live Demo** | https://life-rpg-eba5c.web.app |
+| 💻 **GitHub Repository** | https://github.com/snehal-k296/HabiCity |
+| 🎥 **Demo Video** (90–180s walkthrough) | [ ADD YOUR VIDEO LINK HERE — YouTube unlisted, Loom, or a file in `/demo` in this repo ] |
+
 The goal is simple:
 
 > **Do something meaningful in real life. Watch your village grow.**
