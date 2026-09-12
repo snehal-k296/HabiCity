@@ -5,6 +5,19 @@ import { getArchetype, stageForLevel, VARIANT_ACCENTS } from "../lib/archetypes"
 import { plotVariant } from "../lib/villageLayout";
 import { todayStr } from "../lib/progression";
 
+// How to use real art instead of emoji:
+// Drop a PNG at  public/sprites/<archetype>/stage-<0..3>.png
+// e.g.           public/sprites/library/stage-2.png
+// That's it — no code or import changes needed. This component tries to
+// load that image; if it 404s (because you haven't added it yet), it falls
+// back to the archetype's emoji automatically. Recommended size: a square
+// transparent PNG, 128x128 or 256x256.
+function useSpriteImage(archetypeKey, stage) {
+  const src = `/sprites/${archetypeKey}/stage-${stage}.png`;
+  const [failedSrc, setFailedSrc] = useState(null);
+  return { src, failed: failedSrc === src, markFailed: () => setFailedSrc(src) };
+}
+
 const DRAG_THRESHOLD_PX = 5; // below this, a pointer-down+up counts as a click, not a drag
 
 function clamp(value, min, max) {
@@ -16,6 +29,7 @@ export default function VillagePlot({ domain, isOpen, isCelebrating, onToggle, c
   const archetype = getArchetype(domain.archetype);
   const stage = stageForLevel(level);
   const sprite = archetype.stages[stage];
+  const spriteImg = useSpriteImage(domain.archetype, stage);
   const variantIndex = plotVariant(domain.plotSeed);
   const accent = VARIANT_ACCENTS[variantIndex % VARIANT_ACCENTS.length];
   const activeToday = domain.lastActiveDate === todayStr();
@@ -97,7 +111,17 @@ export default function VillagePlot({ domain, isOpen, isCelebrating, onToggle, c
       aria-label={`${domain.name}, level ${level} ${archetype.label}. Press Enter to open, or drag to move.`}
     >
       <span className="plot-shadow" aria-hidden="true" />
-      <span className="plot-sprite">{sprite}</span>
+      {spriteImg.failed ? (
+        <span className="plot-sprite">{sprite}</span>
+      ) : (
+        <img
+          key={spriteImg.src}
+          src={spriteImg.src}
+          alt=""
+          className="plot-sprite-img"
+          onError={spriteImg.markFailed}
+        />
+      )}
       <span className="plot-glow" style={{ opacity: activeToday ? 1 : 0.15 }}>
         🔥
       </span>

@@ -10,13 +10,13 @@ import { ensureUserDoc } from "./gamedata";
 
 export async function signUp(email, password) {
   const cred = await createUserWithEmailAndPassword(auth, email, password);
-  await ensureUserDoc(cred.user.uid); // create their character sheet
+  await ensureUserDoc(cred.user.uid, cred.user.email); // create their character sheet
   return cred.user;
 }
 
 export async function logIn(email, password) {
   const cred = await signInWithEmailAndPassword(auth, email, password);
-  await ensureUserDoc(cred.user.uid); // no-op if it already exists
+  await ensureUserDoc(cred.user.uid, cred.user.email); // no-op if it already exists
   return cred.user;
 }
 

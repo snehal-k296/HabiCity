@@ -1,8 +1,16 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { HOUSE_ZONE } from "../lib/villageLayout";
 import VillagePlot from "./VillagePlot";
 import PlotPopover from "./PlotPopover";
+
+// Same fallback pattern as VillagePlot's sprites: drop an image at
+// public/sprites/house.png to replace the 🏡 emoji, no code changes needed.
+function HouseSprite() {
+  const [failed, setFailed] = useState(false);
+  if (failed) return <span className="house-sprite">🏡</span>;
+  return <img src="/sprites/house.png" alt="" className="house-sprite-img" onError={() => setFailed(true)} />;
+}
 
 export default function VillageMap({
   domains,
@@ -31,7 +39,7 @@ export default function VillageMap({
           aria-label="Open your house (shop)"
         >
           <span className="house-shadow" aria-hidden="true" />
-          <span className="house-sprite">🏡</span>
+          <HouseSprite />
           <span className="house-label">Home</span>
         </button>
 

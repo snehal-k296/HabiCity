@@ -21,6 +21,7 @@ import { db } from "../firebase";
 import { assignPlot } from "./villageLayout";
 import { xpForDifficulty, goldForDifficulty, nextStreak, todayStr } from "./progression";
 import { inferArchetypeFromName } from "./archetypes";
+import { generateFriendCode, ensurePublicProfile, publicProfileRef } from "./social";
 
 // ---------- Users ----------
 
@@ -29,19 +30,27 @@ export function userDocRef(uid) {
 }
 
 // Called on both signup and login. Safe to call repeatedly (idempotent) —
-// it only creates the doc the first time.
-export async function ensureUserDoc(uid) {
+// it only creates the doc the first time. `email` is only used to derive a
+// friendly default display name (e.g. "jane" from "jane@example.com").
+export async function ensureUserDoc(uid, email) {
   const ref = userDocRef(uid);
   const snap = await getDoc(ref);
   if (!snap.exists()) {
+    const displayName = (email || "Explorer").split("@")[0];
+    const friendCode = generateFriendCode();
     await setDoc(ref, {
       gold: 0,
       streak: 0,
+      totalXp: 0, // overall player total, across every domain — powers the leaderboard
       lastActiveDate: null,
       villageSeed: Date.now(),
       decorations: [],
+      displayName,
+      friendCode,
+      friends: [],
       createdAt: serverTimestamp(),
     });
+    await ensurePublicProfile(uid, { displayName, friendCode });
   }
   return ref;
 }
@@ -154,6 +163,15 @@ export async function completeTask(uid, domainId, task, currentUserDoc) {
   const userRef = userDocRef(uid);
   batch.update(userRef, {
     gold: increment(goldGain),
+    streak: newStreak,
+    lastActiveDate: today,
+    totalXp: increment(xpGain),
+  });
+
+  // Mirror the bits friends/leaderboard need into the public profile, in
+  // the same atomic batch so it never drifts out of sync with the real doc.
+  batch.update(publicProfileRef(uid), {
+    totalXp: increment(xpGain),
     streak: newStreak,
     lastActiveDate: today,
   });

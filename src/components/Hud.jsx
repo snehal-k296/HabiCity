@@ -1,5 +1,5 @@
 // Phase 3/5 — small persistent status bar (gold + streak), not a full stat sheet.
-export default function Hud({ gold, streak, isActiveToday, onOpenShop, onLogout }) {
+export default function Hud({ gold, streak, isActiveToday, onOpenShop, onOpenFriends, onLogout }) {
   return (
     <div className="hud" role="banner">
       <div className="hud-stat" title="Gold">
@@ -10,6 +10,9 @@ export default function Hud({ gold, streak, isActiveToday, onOpenShop, onLogout 
       </div>
       <button className="hud-button" onClick={onOpenShop}>
         🏪 Shop
+      </button>
+      <button className="hud-button" onClick={onOpenFriends}>
+        👥 Friends
       </button>
       <button className="hud-button hud-logout" onClick={onLogout}>
         Log out

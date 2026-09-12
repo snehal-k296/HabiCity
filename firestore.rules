@@ -27,5 +27,19 @@ service cloud.firestore {
         }
       }
     }
+
+    // Small mirrored doc per user with only what's needed for the friends
+    // list and leaderboard (display name, friend code, total XP, streak).
+    // Any signed-in user can read any public profile (that's what powers
+    // "look someone up by friend code" and the leaderboard) — but only the
+    // owner can ever write their own.
+    match /publicProfiles/{userId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth != null
+                    && request.auth.uid == userId
+                    && request.resource.data.totalXp >= resource.data.totalXp;
+      allow delete: if false;
+    }
   }
 }

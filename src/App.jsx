@@ -10,6 +10,7 @@ import Hud from "./components/Hud";
 import VillageMap from "./components/VillageMap";
 import VillageSkeleton from "./components/VillageSkeleton";
 import ShopPanel from "./components/ShopPanel";
+import FriendsPanel from "./components/FriendsPanel";
 import NewDomainForm from "./components/NewDomainForm";
 
 import "./App.css";
@@ -19,14 +20,15 @@ export default function App() {
 
   if (loading) return <VillageSkeleton />;
   if (!user) return <AuthPage />;
-  return <Village uid={user.uid} />;
+  return <Village uid={user.uid} email={user.email} />;
 }
 
-function Village({ uid }) {
+function Village({ uid, email }) {
   const [userDoc, setUserDoc] = useState(null);
   const [domains, setDomains] = useState(null); // null = still loading
   const [openDomainId, setOpenDomainId] = useState(null);
   const [shopOpen, setShopOpen] = useState(false);
+  const [friendsOpen, setFriendsOpen] = useState(false);
   const [newDomainOpen, setNewDomainOpen] = useState(false);
   const [celebratingId, setCelebratingId] = useState(null);
   const [toast, setToast] = useState(null);
@@ -35,14 +37,14 @@ function Village({ uid }) {
     // Safety net: if this uid somehow doesn't have a character sheet yet
     // (e.g. an earlier signup attempt failed partway through), create it
     // now instead of hanging on the loading screen forever.
-    ensureUserDoc(uid);
+    ensureUserDoc(uid, email);
     const unsubUser = subscribeToUserDoc(uid, setUserDoc);
     const unsubDomains = subscribeToDomains(uid, setDomains);
     return () => {
       unsubUser();
       unsubDomains();
     };
-  }, [uid]);
+  }, [uid, email]);
 
   function togglePlot(domainId) {
     setOpenDomainId((cur) => (cur === domainId ? null : domainId));
@@ -94,6 +96,7 @@ function Village({ uid }) {
           streak={userDoc.streak ?? 0}
           isActiveToday={isActiveToday}
           onOpenShop={() => setShopOpen(true)}
+          onOpenFriends={() => setFriendsOpen(true)}
           onLogout={logOut}
         />
       </div>
@@ -120,6 +123,10 @@ function Village({ uid }) {
             onClose={() => setShopOpen(false)}
           />
         )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {friendsOpen && <FriendsPanel uid={uid} userDoc={userDoc} onClose={() => setFriendsOpen(false)} />}
       </AnimatePresence>
 
       <AnimatePresence>

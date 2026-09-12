@@ -368,6 +368,13 @@ h1, h2, h3 {
   font-size: 2.9rem;
   filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.2));
 }
+.house-sprite-img {
+  width: 62%;
+  height: 62%;
+  object-fit: contain;
+  filter: drop-shadow(2px 4px 2px rgba(0, 0, 0, 0.25));
+  pointer-events: none;
+}
 .house-label {
   font-size: 0.62rem;
   font-weight: 700;
@@ -428,6 +435,14 @@ h1, h2, h3 {
   font-size: 2.1rem;
   line-height: 1;
   filter: drop-shadow(1px 2px 0 rgba(0, 0, 0, 0.25));
+}
+
+.plot-sprite-img {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+  filter: drop-shadow(1px 3px 2px rgba(0, 0, 0, 0.3));
+  pointer-events: none;
 }
 
 .plot-glow {
@@ -853,4 +868,118 @@ select:focus-visible {
 
 @media (prefers-reduced-motion: reduce) {
   .tree, .cloud { animation: none; }
+}
+
+/* =====================================================================
+   Friends & leaderboard
+   ===================================================================== */
+.friends-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.friends-tab {
+  flex: 1;
+  border: 2px solid var(--parchment-edge);
+  background: #fffdf6;
+  border-radius: 999px;
+  padding: 8px 6px;
+  font-weight: bold;
+  font-size: 0.8rem;
+  color: var(--ink);
+}
+.friends-tab-active {
+  background: var(--accent);
+  border-color: var(--accent-dark);
+  color: white;
+}
+
+.add-friend-form {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.add-friend-form input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 2px solid var(--parchment-edge);
+  background: #fffdf6;
+  letter-spacing: 2px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.add-friend-form button {
+  border: none;
+  border-bottom: 3px solid var(--accent-dark);
+  border-radius: 8px;
+  background: var(--accent);
+  color: white;
+  font-weight: bold;
+  padding: 0 16px;
+}
+
+.friends-list,
+.leaderboard-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.friend-row,
+.leaderboard-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fffdf6;
+  border: 2px solid var(--parchment-edge);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.leaderboard-row-me {
+  background: #fff3cf;
+  border-color: var(--gold);
+}
+
+.friend-avatar {
+  font-size: 1.4rem;
+}
+
+.leaderboard-rank {
+  font-size: 1.1rem;
+  font-weight: bold;
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.friend-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.friend-name {
+  font-weight: bold;
+  font-size: 0.85rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.friend-meta {
+  font-size: 0.7rem;
+  opacity: 0.7;
+  font-weight: bold;
+}
+
+.friend-remove {
+  background: none;
+  border: none;
+  color: #b3261e;
+  font-size: 0.9rem;
+  flex-shrink: 0;
 }
