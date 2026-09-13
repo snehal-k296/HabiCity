@@ -12,7 +12,6 @@ Instead of managing habits through traditional lists, dashboards, and progress b
 |---|---|
 | 🔗 **Live Demo** | https://life-rpg-eba5c.web.app |
 | 💻 **GitHub Repository** | https://github.com/snehal-k296/HabiCity |
-| 🎥 **Demo Video** (90–180s walkthrough) | [ ADD YOUR VIDEO LINK HERE — YouTube unlisted, Loom, or a file in `/demo` in this repo ] |
 
 The goal is simple:
 
